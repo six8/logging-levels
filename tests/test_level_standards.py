@@ -7,8 +7,8 @@ def test_level_standards(logging, log):
     import logging_levels.standards    
     del sys.modules['logging_levels.standards'] # Force module to re-import
     
-    assert logging.TRACE == 8
-    assert logging.VERBOSE == 9
+    assert logging.TRACE == 5
+    assert logging.VERBOSE == 7
 
     log.verbose("I've said too much")
     assert log.last() == ['VERBOSE', "I've said too much"]
