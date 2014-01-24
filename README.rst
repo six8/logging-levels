@@ -69,6 +69,35 @@ has standards:
     log.verbose('Debug, but so much more')
     log.suppressed('Warn a suppressed exception')        
 
+Project Loggers
+---------------
+
+By defualt, logging_levels manipulates the global logging module.
+For your projects -- especially if you're creating open source
+modules -- you should isolate your logging module.
+
+.. code:: python
+
+    from logging_levels import isolated_logging, log_exceptions
+
+    logging = isolated_logging(
+        STUFF=8,
+        THINGS=22,
+        WTF=log_exceptions(1000),
+    )
+
+    logging.stuff('Log some stuff')
+    logging.wtf('Log some exceptions')
+
+If you create this isolated logging module
+in ``mylib/__init__.py``, then you can use it throughout your
+project easily.
+
+.. code:: python
+
+    from mylib import logging
+    logging.error('Oops, broke something.')
+
 Installing
 ----------
 
