@@ -47,4 +47,15 @@ def _make_log_level(name, level, exceptions, logging):
 
     log.__name__ = func_name
 
-    setattr(logging.Logger, func_name, log)        
+    setattr(logging.Logger, func_name, log)
+
+    def log_root(message, *args, **kws):
+        if exceptions:
+            # Include exceptions by default
+            kws['exc_info'] = kws.get('exc_info', True)
+
+        logging.log(level, message, *args, **kws) 
+
+    log_root.__name__ = func_name
+
+    setattr(logging, func_name, log_root)

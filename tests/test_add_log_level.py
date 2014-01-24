@@ -136,3 +136,11 @@ def test_log_level_must_be_int(logging, log):
     add_log_level(DANG=1, logging=logging)
     assert logging.DANG == 1
 
+
+def test_root_logger_methods(logging):
+    """
+    Ensure new logging methods work on root logger
+    """
+    assert not hasattr(logging, 'roof')
+    add_log_level(ROOF=1, logging=logging)
+    logging.roof('Test roof')
