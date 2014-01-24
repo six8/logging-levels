@@ -1,6 +1,6 @@
 import sys
 
-def test_level_stanards(logging, log):
+def test_level_standards(logging, log):
     """
     Ensure that the standard log levels work 
     """
@@ -16,7 +16,7 @@ def test_level_stanards(logging, log):
     log.trace("But I haven't said enough")
     assert log.last() == ['TRACE', "But I haven't said enough"]
 
-def test_stanards_suppressed(logging, log):
+def test_standards_suppressed(logging, log):
     """
     Ensure that the suppressed log level includes
     the suppressed exception

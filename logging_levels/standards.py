@@ -15,12 +15,12 @@ import logging
 
 add_log_level(
     # Log debug details of constant changes
-    TRACE=8, 
+    TRACE=5, 
     # Log debug with a little more chattyness
-    VERBOSE=9,
+    VERBOSE=7,
 )
 
-# Log a suppressed exception a warning level
+# Log a suppressed exception at warning level
 add_log_level(
     SUPPRESSED=logging.WARN,
     exceptions=True, 

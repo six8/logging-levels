@@ -12,7 +12,7 @@ def main():
         download_url='https://github.com/six8/logging-levels',
         keywords=['logging'],
         license='MIT',
-        description="Add logging levels for when DEBUG just isn't enough.",
+        description="Add convenient logging levels for when DEBUG just isn't enough.",
         classifiers = [
             "Programming Language :: Python",
             "Intended Audience :: Developers",
