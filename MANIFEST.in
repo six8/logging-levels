@@ -2,3 +2,4 @@ include README.rst
 include VERSION.txt
 include LICENSE
 recursive-include tests *
+prune tests/__pycache__
