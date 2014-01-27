@@ -1,11 +1,11 @@
 import sys
+from logging_levels.standards import add_standards    
 
 def test_level_standards(logging, log):
     """
     Ensure that the standard log levels work 
     """
-    import logging_levels.standards    
-    del sys.modules['logging_levels.standards'] # Force module to re-import
+    add_standards(logging)
     
     assert logging.TRACE == 5
     assert logging.VERBOSE == 7
@@ -21,8 +21,7 @@ def test_standards_suppressed(logging, log):
     Ensure that the suppressed log level includes
     the suppressed exception
     """
-    import logging_levels.standards
-    del sys.modules['logging_levels.standards'] # Force module to re-import
+    add_standards(logging)
 
     assert logging.SUPPRESSED
 
