@@ -63,7 +63,9 @@ has standards:
 
 .. code:: python
 
-    import logging_levels.standards    
+    from logging_levels.standards import add_standards
+    import logging
+    add_standards(logging)
 
     log.trace('Log every -- single -- detail')
     log.verbose('Debug, but so much more')
