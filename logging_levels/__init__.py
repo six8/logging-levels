@@ -1,5 +1,6 @@
 import sys
 
+
 class Level(object):
     """
     Represents a log level
@@ -12,11 +13,13 @@ class Level(object):
         self.level = level
         self.exceptions = exceptions
 
+
 def log_exceptions(level):
     """
     Shortcut to create a Level that logs exceptions
     """
     return Level(level, exceptions=True)
+
 
 def isolated_logging(**levels):
     """
@@ -54,9 +57,10 @@ def isolated_logging(**levels):
 
     return logging
 
+
 def add_log_level(exceptions=False, logging=None, **levels):
     """
-    Add additional log levels. 
+    Add additional log levels.
 
     :param logging: Logging module to use (default ``import logging``).
     :param exceptions: True to include exceptions by default with these log levels.
@@ -67,7 +71,7 @@ def add_log_level(exceptions=False, logging=None, **levels):
 
         add_log_level(TRACE=8, VERBOSE=9, exceptions=True)
         add_log_level(WTF=log_exceptions(1000))
-    """    
+    """
     if not logging:
         import logging
 
@@ -85,27 +89,29 @@ def add_log_level(exceptions=False, logging=None, **levels):
     # Now that error checking is out of way, register handlers
     for name, level in levels.items():
         include_exceptions = exceptions
-        if isinstance(level, Level):            
+        if isinstance(level, Level):
             include_exceptions = level.exceptions
             level = level.level
 
         _make_log_level(name, level, include_exceptions, logging)
 
+
 def _make_log_level(name, level, exceptions, logging):
     """
-    Create neccessary log levels, functions, and 
+    Create neccessary log levels, functions, and
     logging attributes for a new log level.
     """
     logging.addLevelName(level, name)
     setattr(logging, name, level)
 
     func_name = name.lower()
+
     def log(self, message, *args, **kws):
         if exceptions:
             # Include exceptions by default
             kws['exc_info'] = kws.get('exc_info', True)
 
-        self.log(level, message, *args, **kws) 
+        self.log(level, message, *args, **kws)
 
     log.__name__ = func_name
 
