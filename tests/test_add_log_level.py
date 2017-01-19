@@ -1,6 +1,8 @@
 from logging_levels import add_log_level
+
 from uuid import uuid4
 import pytest
+
 
 def test_add_levels(logging, log):
     """
@@ -30,6 +32,7 @@ def test_add_levels(logging, log):
         assert lvl == 'FOO'
         assert msg == message
 
+
 def test_log_level_works(logging, log):
     """
     Ensure that log messages only appear in the logging
@@ -47,7 +50,7 @@ def test_log_level_works(logging, log):
     # Noise message should NOT appear
     log.noise('noise')
     assert not log.last()
-    
+
     # Spam message should NOT appear
     log.spam('spam')
     assert not log.last()
@@ -70,6 +73,7 @@ def test_log_level_works(logging, log):
     log.spam('spam')
     assert not log.last()
 
+
 def test_names_must_be_upper_case(logging):
     """
     Ensure logging names must be uppercase
@@ -84,6 +88,7 @@ def test_names_must_be_upper_case(logging):
 
     # Underscore OK
     add_log_level(FOO_BAR=1, logging=logging)
+
 
 def test_add_levels_with_exceptions(logging, log):
     """
@@ -101,9 +106,10 @@ def test_add_levels_with_exceptions(logging, log):
     except:
         log.wtf('Something just happened')
 
-    lines = ''.join(log.readlines())    
+    lines = ''.join(log.readlines())
     assert lines.startswith('WTF:')
     assert 'Exception: What was that?' in lines
+
 
 def test_override_default_levels(logging, log):
     """
@@ -116,14 +122,13 @@ def test_override_default_levels(logging, log):
     with pytest.raises(KeyError):
         add_log_level(DEBUG=5000, logging=logging)
 
-
     # Override custom log levels?
     add_log_level(MONKEY=1000, logging=logging)
-    
     assert logging.MONKEY == 1000
 
     with pytest.raises(KeyError):
         add_log_level(MONKEY=1000, logging=logging)
+
 
 def test_log_level_must_be_int(logging, log):
     """
@@ -144,3 +149,37 @@ def test_root_logger_methods(logging):
     assert not hasattr(logging, 'roof')
     add_log_level(ROOF=1, logging=logging)
     logging.roof('Test roof')
+
+
+def test_aliases_change_builtin_severity_levels(logging, log):
+    """
+    This test asserts a specific behavior of how adding log levels
+    behaves when using the python logging modules. If you add a level
+    using logging-levels for a log level that already exists, your new
+    level will override any existing level. This can be intended, but
+    it can have unintended consequences if you're not expecting it.
+    """
+    assert not hasattr(logging, 'SUPPRESSED')
+
+    add_log_level(SUPPRESSED=logging.WARN, logging=logging)
+
+    assert logging.SUPPRESSED == logging.WARN
+
+    message = 'Testing suppressed logging {0}'.format(uuid4())
+    log.suppressed(message)
+
+    lvl, msg = log.last()
+    assert lvl == 'SUPPRESSED'
+    assert msg == message
+
+    message = 'Testing warning logging {0}'.format(uuid4())
+
+    # Python still tracks a shortcut for WARN here, but after adding
+    # SUPPRESSED at the same level above, python has updated it's mapping
+    # from NAME to LVL to be this latest level name. This severity alias
+    # will work, but the level name will be the new level.
+    log.warn(message)
+
+    lvl, msg = log.last()
+    assert lvl == 'SUPPRESSED'
+    assert msg == message
