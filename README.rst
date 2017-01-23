@@ -7,13 +7,13 @@ logging-levels
 
 As projects get bigger, ``logging.debug()`` becomes the dumping
 ground for everything that your application is doing. This usually
-becomes so noisy that you can't really make sense of what you're 
-trying to debug. 
+becomes so noisy that you can't really make sense of what you're
+trying to debug.
 
-Although it is usually disabled in production, 
-sometimes you need to enable debug logging to -- you know -- actually
-debug something. But since *everything* is dumped there, it's too
-much of a mess to wade through.
+Although it is usually disabled in production, sometimes you need to
+enable debug logging to -- you know -- actually debug something. But
+since *everything* is dumped there, it's too much of a mess to wade
+through.
 
 To help with this, you can add extra logging levels. However, rarely
 are they added to projects and when they are, they're often incomplete.
@@ -58,18 +58,6 @@ Want to implicitly log exceptions with your fancy new log level?:
         # Will include exception in log
         log.dang('Something broke.')
 
-To help everyone standardize on some log levels, logging_levels
-has standards:
-
-.. code:: python
-
-    from logging_levels.standards import add_standards
-    import logging
-    add_standards(logging)
-
-    log.trace('Log every -- single -- detail')
-    log.verbose('Debug, but so much more')
-    log.suppressed('Warn a suppressed exception')        
 
 Project Loggers
 ---------------
@@ -100,6 +88,66 @@ project easily.
     from mylib import logging
     logging.error('Oops, broke something.')
 
+
+Standards
+---------
+
+To help everyone standardize on the same log levels, this library
+provides a function to add some missing severity levels defined by the
+the syslog protocol in `RFC-5424 <https://tools.ietf.org/html/rfc5424>`_.
+
+This library also introduces some additional debugging levels and a
+``SUPPRESSED`` level which is intended to be used for logging suppressed
+exceptions that you may want to log, but otherwise consider handled.
+
+Use the function ``add_standards`` to add the standard levels provided
+by logging-levels:
+
+.. code:: python
+
+    from logging_levels.standards import add_standards
+    import logging
+    add_standards(logging)
+
+    log.emergency('This aggression will not stand, man.')
+    log.alert('Oh no! Something happened!')
+    log.notice('FYI this other thing happened.')
+    log.verbose('Debug, but so much more')
+    log.trace('Log every -- single -- detail')
+    log.suppressed('Warn a suppressed exception')
+
+
+All levels after using ``add_standards`` will be (new levels are bolded):
+
++---------------+---------------+
+| Level         | Numeric Value |
++===============+===============+
+| **EMERGENCY** | **100**       |
++---------------+---------------+
+| **ALERT**     | **70**        |
++---------------+---------------+
+| CRITICAL      | 50            |
++---------------+---------------+
+| ERROR         | 40            |
++---------------+---------------+
+| **SUPPRESSED**| **31**        |
++---------------+---------------+
+| WARNING       | 30            |
++---------------+---------------+
+| **NOTICE**    | **25**        |
++---------------+---------------+
+| INFO          | 20            |
++---------------+---------------+
+| DEBUG         | 10            |
++---------------+---------------+
+| **VERBOSE**   |  **7**        |
++---------------+---------------+
+| **TRACE**     |  **5**        |
++---------------+---------------+
+| NOTSET        |  0            |
++---------------+---------------+
+
+
 Installing
 ----------
 
@@ -114,7 +162,7 @@ Install dev requirements:
 
 .. code-block:: console
 
-    pip install -r dev.requirements.txt
+    pip install -r test.requirements.txt
 
 Install project:
 

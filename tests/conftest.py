@@ -8,7 +8,7 @@ except ImportError:
     # Python 3.x use io.StringIO but not in 2.x
     # because in 2.x io.StringIO expects unicodes
     from io import StringIO as Stream
-    
+
 
 @pytest.fixture(scope='function')
 def logging(request):
@@ -20,9 +20,9 @@ def logging(request):
     import logging
     sys.modules['logging'] = logging
 
-    def exit():        
+    def exit():
         loaded = sys.modules.get('logging', None)
-        if loaded == logging:            
+        if loaded == logging:
             # Remove so others don't use it
             del sys.modules['logging']
 
@@ -30,10 +30,11 @@ def logging(request):
 
     return logging
 
+
 @pytest.fixture
 def stream_log():
     """
-    Returns a function that will create a logger 
+    Returns a function that will create a logger
     for the specified logging module
     with a StringIO log handler and sets the format
     to "{levelname}:{message}".
@@ -48,12 +49,12 @@ def stream_log():
 
         log = logging.getLogger()
         log.setLevel(0)
-        for handler in log.handlers: 
+        for handler in log.handlers:
             log.removeHandler(handler)
-        log.addHandler(handler)    
-
+        log.addHandler(handler)
 
         ctx = {'pos': 0}
+
         def readlines():
             """
             Read one line from the log stream.
@@ -78,6 +79,7 @@ def stream_log():
         return log
     return make
 
+
 @pytest.fixture(scope='function')
 def log(logging, stream_log):
     """
@@ -85,4 +87,4 @@ def log(logging, stream_log):
     with a StringIO log handler and sets the format
     to "{levelname}:{message}".
     """
-    return stream_log(logging)    
+    return stream_log(logging)
